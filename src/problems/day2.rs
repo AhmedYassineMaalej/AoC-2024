@@ -53,7 +53,7 @@ fn is_safe_with_tolerance(numbers: &[u64]) -> bool {
     misses <= 1
 }
 
-#[allow(unused)]
+#[allow(dead_code)]
 pub fn part_one() -> usize {
     let input: &str = include_str!("../../input/day2.txt");
 

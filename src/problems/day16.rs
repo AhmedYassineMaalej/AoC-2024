@@ -1,5 +1,5 @@
 use std::{
-    cmp::Ordering,
+    cmp::{Ordering, Reverse},
     collections::{BinaryHeap, HashMap, HashSet},
     ops::{Add, Sub},
 };
@@ -26,10 +26,10 @@ impl From<char> for Tile {
 
 #[derive(Clone, Copy, Debug, PartialEq, Hash, Eq)]
 enum Direction {
-    East,
-    West,
-    North,
-    South,
+    East = 0,
+    West = 1,
+    North = 2,
+    South = 3,
 }
 
 impl Add<Direction> for (usize, usize) {
@@ -80,44 +80,16 @@ impl Direction {
     }
 }
 
-#[derive(PartialEq, Eq, Debug, Clone, Copy)]
-struct Moves {
-    steps: usize,
-    turns: usize,
-}
-
-impl Moves {
-    fn cost(&self) -> usize {
-        self.steps + self.turns * 1000
-    }
-}
-
-impl PartialOrd for Moves {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for Moves {
-    fn cmp(&self, other: &Self) -> Ordering {
-        if self.turns.abs_diff(other.turns) <= 1 {
-            return self.steps.cmp(&other.steps);
-        }
-
-        self.turns.cmp(&other.turns)
-    }
-}
-
 #[derive(Debug)]
 struct Node {
     position: (usize, usize),
     direction: Direction,
-    moves: Moves,
+    cost: usize,
 }
 
 impl PartialEq for Node {
     fn eq(&self, other: &Self) -> bool {
-        self.moves.eq(&other.moves)
+        self.cost.eq(&other.cost)
     }
 }
 
@@ -131,7 +103,7 @@ impl PartialOrd for Node {
 
 impl Ord for Node {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.moves.cmp(&other.moves).reverse()
+        self.cost.cmp(&other.cost)
     }
 }
 
@@ -166,22 +138,21 @@ impl Grid {
 
     fn min_path_cost(&self) -> Option<usize> {
         let mut moves_to_visit = vec![vec![usize::MAX; self.width]; self.height];
-        let mut to_visit: BinaryHeap<Node> = BinaryHeap::new();
+        let mut to_visit: BinaryHeap<Reverse<Node>> = BinaryHeap::new();
 
-        to_visit.push(Node {
+        to_visit.push(Reverse(Node {
             position: self.start,
             direction: Direction::East,
-            moves: Moves { steps: 0, turns: 0 },
-        });
+            cost: 0,
+        }));
 
-        while let Some(node) = to_visit.pop() {
+        while let Some(Reverse(node)) = to_visit.pop() {
             let Node {
                 position,
                 direction,
-                moves,
+                cost,
             } = node;
 
-            let cost = moves.cost();
             let (row, col) = position;
 
             if position == self.end {
@@ -199,40 +170,31 @@ impl Grid {
             let (next_row, next_col) = position + direction;
 
             if self.tiles[next_row][next_col] != Tile::Wall {
-                to_visit.push(Node {
+                to_visit.push(Reverse(Node {
                     position: (next_row, next_col),
                     direction,
-                    moves: Moves {
-                        steps: moves.steps + 1,
-                        turns: moves.turns,
-                    },
-                });
+                    cost: cost + 1,
+                }));
             }
 
             let (right_row, right_col) = position + direction.turn_right();
 
             if self.tiles[right_row][right_col] != Tile::Wall {
-                to_visit.push(Node {
+                to_visit.push(Reverse(Node {
                     position: (right_row, right_col),
                     direction: direction.turn_right(),
-                    moves: Moves {
-                        steps: moves.steps + 1,
-                        turns: moves.turns + 1,
-                    },
-                });
+                    cost: cost + 1001,
+                }));
             }
 
             let (left_row, left_col) = position + direction.turn_left();
 
             if self.tiles[left_row][left_col] != Tile::Wall {
-                to_visit.push(Node {
+                to_visit.push(Reverse(Node {
                     position: (left_row, left_col),
                     direction: direction.turn_left(),
-                    moves: Moves {
-                        steps: moves.steps + 1,
-                        turns: moves.turns + 1,
-                    },
-                });
+                    cost: cost + 1001,
+                }));
             }
         }
 
@@ -240,86 +202,83 @@ impl Grid {
     }
 
     fn get_min_path_tiles(&self) -> Option<usize> {
-        let mut moves_to_visit: Vec<Vec<Moves>> = vec![
-            vec![
-                Moves {
-                    steps: 100_000,
-                    turns: 100_000,
-                };
-                self.width
-            ];
-            self.height
-        ];
-        let mut to_visit: BinaryHeap<Node> = BinaryHeap::new();
+        let mut cost_to_visit: Vec<Vec<usize>> = vec![vec![usize::MAX; self.width]; self.height];
+
+        // Reverse<T> so it's a min-heap (the top element is always the one with least cost)
+        let mut to_visit: BinaryHeap<Reverse<Node>> = BinaryHeap::new();
         let mut prev: HashMap<(usize, usize), Vec<(usize, usize)>> = HashMap::new();
 
-        to_visit.push(Node {
+        to_visit.push(Reverse(Node {
             position: self.start,
             direction: Direction::East,
-            moves: Moves { steps: 0, turns: 0 },
-        });
+            cost: 0,
+        }));
 
         while let Some(node) = to_visit.pop() {
-            let Node {
+            let Reverse(Node {
                 position,
                 direction,
-                moves,
-            } = node;
+                cost,
+            }) = node;
 
             if position == self.end {
                 // reached target
                 prev.entry(self.end).or_default().push(position - direction);
-                println!("{}", self.count_tiles(&prev));
-                return Some(moves.cost());
+                return Some(self.count_tiles(&prev));
             }
 
             let (row, col) = position;
+
             // already found a better way
-            if moves > moves_to_visit[row][col] {
+            let (turns, steps) = (cost / 1000, cost % 1000);
+
+            let min = cost_to_visit[row][col];
+            let (min_turns, min_steps) = (min / 1000, min % 1000);
+
+            if turns > min_turns + 1 {
                 continue;
             }
 
-            moves_to_visit[row][col] = moves;
+            if steps > min_steps {
+                continue;
+            }
 
-            prev.entry(position).or_default().push(position - direction);
+            if steps < min_steps {
+                prev.insert(position, Vec::new());
+            }
+
+            cost_to_visit[row][col] = cost;
+
+            prev.get_mut(&position).unwrap().push(position - direction);
 
             let (next_row, next_col) = position + direction;
 
             if self.tiles[next_row][next_col] != Tile::Wall {
-                to_visit.push(Node {
+                to_visit.push(Reverse(Node {
                     position: (next_row, next_col),
                     direction,
-                    moves: Moves {
-                        steps: moves.steps + 1,
-                        turns: moves.turns,
-                    },
-                });
+                    cost: cost + 1,
+                }));
             }
 
             let (right_row, right_col) = position + direction.turn_right();
 
             if self.tiles[right_row][right_col] != Tile::Wall {
-                to_visit.push(Node {
+                to_visit.push(Reverse(Node {
                     position: (right_row, right_col),
                     direction: direction.turn_right(),
-                    moves: Moves {
-                        steps: moves.steps + 1,
-                        turns: moves.turns + 1,
-                    },
-                });
+                    cost: cost + 1001,
+                }));
             }
 
             let (left_row, left_col) = position + direction.turn_left();
 
             if self.tiles[left_row][left_col] != Tile::Wall {
-                to_visit.push(Node {
+                to_visit.push(Reverse(Node {
                     position: (left_row, left_col),
                     direction: direction.turn_left(),
-                    moves: Moves {
-                        steps: moves.steps + 1,
-                        turns: moves.turns + 1,
-                    },
-                });
+                    cost: cost + 1001,
+                }));
             }
         }
 
@@ -347,6 +306,7 @@ impl Grid {
     }
 }
 
+#[allow(dead_code)]
 pub fn part_one() -> usize {
     let input: &str = include_str!("../../input/day16.txt");
 
@@ -355,25 +315,11 @@ pub fn part_one() -> usize {
     grid.min_path_cost().unwrap()
 }
 
+#[allow(dead_code)]
 pub fn part_two() -> usize {
     let input: &str = include_str!("../../input/day16.txt");
 
     let grid = Grid::parse(input);
 
     grid.get_min_path_tiles().unwrap()
-}
-
-#[test]
-fn test() {
-    let x = Moves {
-        steps: 10,
-        turns: 1,
-    };
-
-    let y = Moves {
-        steps: 5,
-        turns: 0,
-    };
-
-    println!("{}", x > y);
 }

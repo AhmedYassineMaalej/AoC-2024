@@ -1,7 +1,7 @@
 use std::{
     cmp::{Ordering, Reverse},
-    collections::{BinaryHeap, HashMap, HashSet},
-    ops::{Add, Sub},
+    collections::{BinaryHeap, HashSet},
+    ops::{Add, Index, IndexMut, Sub},
 };
 
 #[derive(PartialEq, Debug)]
@@ -107,6 +107,19 @@ impl Ord for Node {
     }
 }
 
+impl Index<Direction> for [bool; 4] {
+    type Output = bool;
+
+    fn index(&self, index: Direction) -> &Self::Output {
+        &self[index as usize]
+    }
+}
+
+impl IndexMut<Direction> for [bool; 4] {
+    fn index_mut(&mut self, index: Direction) -> &mut Self::Output {
+        &mut self[index as usize]
+    }
+}
 struct Grid {
     tiles: Vec<Vec<Tile>>,
     width: usize,
@@ -206,7 +219,9 @@ impl Grid {
 
         // Reverse<T> so it's a min-heap (the top element is always the one with least cost)
         let mut to_visit: BinaryHeap<Reverse<Node>> = BinaryHeap::new();
-        let mut prev: HashMap<(usize, usize), Vec<(usize, usize)>> = HashMap::new();
+
+        let mut prev: Vec<Vec<[bool; 4]>> = vec![vec![[false; 4]; self.width]; self.height];
+        // let mut prev: HashMap<(usize, usize), Vec<(usize, usize)>> = HashMap::new();
 
         to_visit.push(Reverse(Node {
             position: self.start,
@@ -221,13 +236,12 @@ impl Grid {
                 cost,
             }) = node;
 
+            let (row, col) = position;
             if position == self.end {
                 // reached target
-                prev.entry(self.end).or_default().push(position - direction);
+                prev[row][col][direction] = true;
                 return Some(self.count_tiles(&prev));
             }
-
-            let (row, col) = position;
 
             // already found a better way
             let (turns, steps) = (cost / 1000, cost % 1000);
@@ -244,12 +258,12 @@ impl Grid {
             }
 
             if steps < min_steps {
-                prev.insert(position, Vec::new());
+                prev[row][col].fill(false);
             }
 
             cost_to_visit[row][col] = cost;
 
-            prev.get_mut(&position).unwrap().push(position - direction);
+            prev[row][col][direction] = true;
 
             let (next_row, next_col) = position + direction;
 
@@ -285,20 +299,34 @@ impl Grid {
         None
     }
 
-    fn count_tiles(&self, prev: &HashMap<(usize, usize), Vec<(usize, usize)>>) -> usize {
+    fn count_tiles(&self, prev: &[Vec<[bool; 4]>]) -> usize {
         let mut tiles = HashSet::new();
         tiles.insert(self.start);
 
         let mut to_add = Vec::new();
         to_add.push(self.end);
 
-        while let Some(position) = to_add.pop() {
-            if !tiles.insert(position) {
+        while let Some((row, col)) = to_add.pop() {
+            if !tiles.insert((row, col)) {
                 continue;
             }
 
-            if let Some(prev_positions) = prev.get(&position) {
-                to_add.extend(prev_positions);
+            let directions = prev[row][col];
+
+            if directions[Direction::East] {
+                to_add.push((row, col) - Direction::East);
+            }
+
+            if directions[Direction::West] {
+                to_add.push((row, col) - Direction::West);
+            }
+
+            if directions[Direction::North] {
+                to_add.push((row, col) - Direction::North);
+            }
+
+            if directions[Direction::South] {
+                to_add.push((row, col) - Direction::South);
             }
         }
 
@@ -323,3 +351,4 @@ pub fn part_two() -> usize {
 
     grid.get_min_path_tiles().unwrap()
 }
+

@@ -7,7 +7,7 @@ mod problems;
 fn main() {
     let start = Instant::now();
 
-    let result = problems::day15::part_one();
+    let result = problems::day17::part_two();
 
     let duration = start.elapsed();
 

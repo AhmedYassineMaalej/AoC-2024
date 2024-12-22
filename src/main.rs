@@ -16,9 +16,9 @@ macro_rules! run {
 fn main() {
     let start = Instant::now();
 
-    let result = problems::day19::part_two();
+    let result = problems::day20::part_one();
 
     let duration = start.elapsed();
 
-    println!("{result:?} in {duration:?}");
+    println!("{result} in {duration:?}");
 }

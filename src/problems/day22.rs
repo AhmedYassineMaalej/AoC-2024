@@ -32,6 +32,7 @@ pub fn part_one() -> i64 {
     sum
 }
 
+#[allow(dead_code)]
 pub fn part_two() -> i64 {
     let input: &str = include_str!("../../input/day22.txt");
 

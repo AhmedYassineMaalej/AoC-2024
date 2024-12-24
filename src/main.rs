@@ -16,7 +16,7 @@ macro_rules! run {
 fn main() {
     let start = Instant::now();
 
-    let result = problems::day23::part_one();
+    let result = problems::day24::part_two();
 
     let duration = start.elapsed();
 

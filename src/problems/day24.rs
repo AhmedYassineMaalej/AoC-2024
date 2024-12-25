@@ -181,6 +181,7 @@ pub fn part_one() -> usize {
     device.get_output()
 }
 
+#[allow(dead_code)]
 pub fn part_two() -> String {
     // found these by hand, kept changing the values of x and y
     // and tracking down the mistakes and swapping them

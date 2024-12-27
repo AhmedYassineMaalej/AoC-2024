@@ -14,7 +14,7 @@ I skipped day 21 (skill issue)
 Performance does not include reading the input as I include it in the source code using the [`!include_str()`](https://doc.rust-lang.org/std/macro.include_str.html) macro
 
 ## Performace
-| Day | Problem | Solution | Benchmark |
+| Day | Problem | Solution | Benchmark(part1\|part2) |
 | :---: | :------- | :--------: | :---------: |
 | 1 | [Historian Hysteria](https://adventofcode.com/2024/day/1) | [Source](src/problems/day1.rs) | 90µs \| 145µs |
 | 2 | [Red-Nosed Reports](https://adventofcode.com/2024/day/2) | [Source](src/problems/day2.rs) | 300µs \| 800µs |

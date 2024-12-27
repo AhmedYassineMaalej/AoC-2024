@@ -101,3 +101,29 @@ pub fn part2(input: &str) -> usize {
 
     count
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const EXAMPLE_INPUT: &str = "MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX";
+
+    #[test]
+    fn test_part1() {
+        assert_eq!(part1(EXAMPLE_INPUT), 18);
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2(EXAMPLE_INPUT), 9);
+    }
+}

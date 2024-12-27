@@ -1,4 +1,4 @@
-## Advent of Code 2024
+## Advent of Code 2024 ![.github/workflows/rust.yml](https://github.com/AhmedYassineMaalej/AoC-2024/actions/workflows/rust.yml/badge.svg)
 
 My personal solutions to [Advent of Code 2024](https://adventofcode.com/2024) in Rust.
 

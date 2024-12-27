@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 #[allow(dead_code)]
-fn part1(input: &str) -> usize {
+pub fn part1(input: &str) -> usize {
     let (mut list1, mut list2) = parse_lists(input);
 
     list1.sort_unstable();
@@ -11,7 +11,7 @@ fn part1(input: &str) -> usize {
 }
 
 #[allow(dead_code)]
-fn part2(input: &str) -> usize {
+pub fn part2(input: &str) -> usize {
     let (list1, list2) = parse_lists(input);
 
     let freqs = list2.into_iter().counts();

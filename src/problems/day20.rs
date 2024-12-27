@@ -118,7 +118,8 @@ impl Grid {
         let mut count = 0;
 
         for (start_distance, cheat_start) in self.path.iter().enumerate() {
-            for (end_distance, cheat_end) in self.path.iter().enumerate().skip(start_distance + 100) {
+            for (end_distance, cheat_end) in self.path.iter().enumerate().skip(start_distance + 100)
+            {
                 if start_distance > end_distance {
                     continue;
                 }
@@ -143,16 +144,14 @@ fn manhattan_distance(start: &(usize, usize), end: &(usize, usize)) -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day20.txt");
+pub fn part1(input: &str) -> usize {
     let grid = Grid::from(input);
 
     grid.count_cheats(2)
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day20.txt");
+pub fn part2(input: &str) -> usize {
     let grid = Grid::from(input);
 
     grid.count_cheats(20)

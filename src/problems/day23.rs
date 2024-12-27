@@ -3,9 +3,7 @@ use std::collections::{HashSet, VecDeque};
 use itertools::Itertools;
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day23.txt");
-
+pub fn part1(input: &str) -> usize {
     let mut connections: HashSet<(&str, &str)> = HashSet::new();
     let mut computers: HashSet<&str> = HashSet::new();
 
@@ -44,9 +42,7 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> String {
-    let input: &str = include_str!("../../input/day23.txt");
-
+pub fn part2(input: &str) -> String {
     let mut connections: HashSet<(&str, &str)> = HashSet::new();
     let mut computers: HashSet<&str> = HashSet::new();
 
@@ -63,16 +59,19 @@ pub fn part_two() -> String {
     let mut computers: Vec<&str> = computers.into_iter().collect();
     computers.sort_unstable();
     let mut computers: VecDeque<&str> = computers.into_iter().collect();
-    
+
     let mut max_groups: Vec<Vec<&str>> = Vec::new();
 
     while let Some(seed) = computers.pop_front() {
-        let mut curr_group = vec![seed]; 
-        
+        let mut curr_group = vec![seed];
+
         let mut is_maximal = false;
         'outer: while !is_maximal {
             for (idx, computer) in computers.iter().enumerate() {
-                if curr_group.iter().all(|curr_computer| connections.contains(&(curr_computer, computer))) {
+                if curr_group
+                    .iter()
+                    .all(|curr_computer| connections.contains(&(curr_computer, computer)))
+                {
                     curr_group.push(computers.remove(idx).unwrap());
                     continue 'outer;
                 }
@@ -84,7 +83,6 @@ pub fn part_two() -> String {
         max_groups.push(curr_group);
     }
 
-    
     let biggest_connected_network = max_groups.into_iter().max_by_key(Vec::len).unwrap();
     biggest_connected_network.into_iter().join(",")
 }

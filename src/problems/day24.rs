@@ -171,9 +171,7 @@ impl Device {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day24.txt");
-
+pub fn part1(input: &str) -> usize {
     let mut device = Device::from(input);
 
     device.execute();
@@ -182,7 +180,8 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> String {
+#[allow(unused)]
+pub fn part2(input: &str) -> String {
     // found these by hand, kept changing the values of x and y
     // and tracking down the mistakes and swapping them
     let pairs = [
@@ -192,7 +191,10 @@ pub fn part_two() -> String {
         ("z16", "mrb"),
     ];
 
-    let mut wires: Vec<&str> = pairs.iter().flat_map(|pair| [pair.0, pair.1].into_iter()).collect();
+    let mut wires: Vec<&str> = pairs
+        .iter()
+        .flat_map(|pair| [pair.0, pair.1].into_iter())
+        .collect();
     wires.sort_unstable();
 
     wires.iter().join(",")

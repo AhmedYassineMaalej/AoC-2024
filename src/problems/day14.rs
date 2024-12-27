@@ -148,9 +148,7 @@ fn grid_to_string(grid: Vec<Vec<u8>>) -> String {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day14.txt");
-
+pub fn part1(input: &str) -> usize {
     let mut robots = Vec::new();
 
     for line in input.lines() {
@@ -167,9 +165,7 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> String {
-    let input: &str = include_str!("../../input/day14.txt");
-
+pub fn part2(input: &str) -> String {
     let mut robots = Vec::new();
 
     for line in input.lines() {

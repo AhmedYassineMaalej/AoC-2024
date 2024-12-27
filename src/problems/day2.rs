@@ -1,19 +1,32 @@
+#[allow(dead_code)]
+pub fn part1(input: &str) -> usize {
+    input
+        .lines()
+        .map(parse_report)
+        .filter(|report| is_monotone(report))
+        .count()
+}
+
+fn parse_report(line: &str) -> Vec<u64> {
+    line.split(' ').map(|n| n.parse().unwrap()).collect()
+}
+
 fn is_monotone(numbers: &[u64]) -> bool {
     if numbers.len() <= 1 {
         return true;
     }
 
-    let order = numbers[0].cmp(&numbers[1]);
+    let ordering = numbers[0].cmp(&numbers[1]);
 
     for window in numbers.windows(2) {
-        let curr = window.first().unwrap();
-        let next = window.get(1).unwrap();
+        let curr = window[0];
+        let next = window[1];
 
-        if !(1..=3).contains(&curr.abs_diff(*next)) {
+        if !(1..=3).contains(&curr.abs_diff(next)) {
             return false;
         }
 
-        if curr.cmp(next) != order {
+        if curr.cmp(&next) != ordering {
             return false;
         }
     }
@@ -21,7 +34,17 @@ fn is_monotone(numbers: &[u64]) -> bool {
     true
 }
 
-fn is_safe_with_tolerance(numbers: &[u64]) -> bool {
+#[allow(dead_code)]
+pub fn part2(input: &str) -> usize {
+    input
+        .lines()
+        .map(parse_report)
+        .filter(|report| is_monotone_with_tolerance(report))
+        .count()
+}
+
+fn is_monotone_with_tolerance(numbers: &[u64]) -> bool {
+    // check if we remove the 1st element
     if is_monotone(&numbers[1..]) {
         return true;
     }
@@ -53,36 +76,24 @@ fn is_safe_with_tolerance(numbers: &[u64]) -> bool {
     misses <= 1
 }
 
-#[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day2.txt");
+#[cfg(test)]
+mod tests {
+    use super::{part1, part2};
 
-    let mut reports: Vec<Vec<u64>> = Vec::new();
+    const EXAMPLE_INPUT: &str = "7 6 4 2 1
+1 2 7 8 9
+9 7 6 2 1
+1 3 2 4 5
+8 6 4 4 1
+1 3 6 7 9";
 
-    for line in input.lines() {
-        let numbers = line.split(' ').map(|n| n.parse().unwrap()).collect();
-
-        reports.push(numbers);
+    #[test]
+    fn test_part1() {
+        assert_eq!(part1(EXAMPLE_INPUT), 2);
     }
 
-    reports
-        .into_iter()
-        .filter(|numbers| is_monotone(numbers))
-        .count()
-}
-
-#[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day2.txt");
-
-    let mut count = 0;
-    for line in input.lines() {
-        let numbers: Vec<u64> = line.split(' ').map(|n| n.parse().unwrap()).collect();
-
-        if is_safe_with_tolerance(&numbers) {
-            count += 1;
-        }
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2(EXAMPLE_INPUT), 4);
     }
-
-    count
 }

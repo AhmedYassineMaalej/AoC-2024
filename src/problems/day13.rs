@@ -6,9 +6,7 @@ fn det(a: i64, b: i64, c: i64, d: i64) -> i64 {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> i64 {
-    let input: &str = include_str!("../../input/day13.txt");
-
+pub fn part1(input: &str) -> i64 {
     let mut result = 0;
     for section in input.split("\r\n\r\n") {
         let mut lines_iter = section.lines();
@@ -52,13 +50,10 @@ pub fn part_one() -> i64 {
     }
 
     result
-
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> i64 {
-    let input: &str = include_str!("../../input/day13.txt");
-
+pub fn part2(input: &str) -> i64 {
     let mut result = 0;
     for section in input.split("\r\n\r\n") {
         let mut lines_iter = section.lines();

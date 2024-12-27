@@ -1,50 +1,59 @@
 use itertools::Itertools;
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day1.txt");
-
-    let pairs = input.lines().map(|line| {
-        let (num1, num2) = line.split_once("   ").unwrap();
-        let num1: usize = num1.parse().unwrap();
-        let num2: usize = num2.parse().unwrap();
-
-        (num1, num2)
-    });
-
-    let (mut list1, mut list2): (Vec<_>, Vec<_>) = pairs.unzip();
+fn part1(input: &str) -> usize {
+    let (mut list1, mut list2) = parse_lists(input);
 
     list1.sort_unstable();
     list2.sort_unstable();
 
-    let mut result = 0;
-    for (n1, n2) in list1.into_iter().zip(list2.into_iter()) {
-        result += n1.abs_diff(n2);
-    }
-
-    result
+    list1.iter().zip(list2).map(|(x, y)| x.abs_diff(y)).sum()
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input = include_str!("../../input/day1.txt");
+fn part2(input: &str) -> usize {
+    let (list1, list2) = parse_lists(input);
 
-    let pairs = input.lines().map(|line| {
-        let (num1, num2) = line.split_once("   ").unwrap();
-        let num1: usize = num1.parse().unwrap();
-        let num2: usize = num2.parse().unwrap();
+    let freqs = list2.into_iter().counts();
 
-        (num1, num2)
-    });
+    list1
+        .iter()
+        .filter_map(|n| freqs.get(n).map(|freq| freq * n))
+        .sum()
+}
 
-    let (list1, list2): (Vec<_>, Vec<_>) = pairs.unzip();
+/// parses the input into two columns of integers
+fn parse_lists(input: &str) -> (Vec<usize>, Vec<usize>) {
+    input
+        .lines()
+        .map(|line| {
+            let (num1, num2) = line.split_once("   ").unwrap();
+            (
+                num1.parse::<usize>().unwrap(),
+                num2.parse::<usize>().unwrap(),
+            )
+        })
+        .collect()
+}
 
-    let counts = list2.into_iter().counts();
+#[cfg(test)]
+mod tests {
+    use super::{part1, part2};
 
-    let result = list1
-        .into_iter()
-        .map(|n| counts.get(&n).unwrap_or(&0) * n)
-        .sum();
+    const EXAMPLE_INPUT: &str = "3   4
+4   3
+2   5
+1   3
+3   9
+3   3";
 
-    result
+    #[test]
+    fn test_part1() {
+        assert_eq!(part1(EXAMPLE_INPUT), 11);
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2(EXAMPLE_INPUT), 31);
+    }
 }

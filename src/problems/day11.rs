@@ -3,9 +3,7 @@ use std::{collections::HashMap, mem};
 use itertools::Itertools;
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day11.txt");
-
+pub fn part1(input: &str) -> usize {
     let stones: HashMap<usize, usize> = input
         .split_whitespace()
         .map(|x| x.parse().unwrap())
@@ -15,9 +13,7 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day11.txt");
-
+pub fn part2(input: &str) -> usize {
     let stones: HashMap<usize, usize> = input
         .split_whitespace()
         .map(|x| x.parse().unwrap())

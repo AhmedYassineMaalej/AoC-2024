@@ -1,9 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day19.txt");
-
+pub fn part1(input: &str) -> usize {
     let (towels, designs) = input.split_once("\r\n\r\n").unwrap();
 
     let towels: HashSet<&str> = towels.split(", ").collect();
@@ -46,9 +44,7 @@ fn can_make<'a>(
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day19.txt");
-
+pub fn part2(input: &str) -> usize {
     let (towels, designs) = input.split_once("\r\n\r\n").unwrap();
 
     let towels: HashSet<&str> = towels.split(", ").collect();

@@ -190,9 +190,7 @@ fn count_sides(fences: &mut HashSet<Fence>) -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day12.txt");
-
+pub fn part1(input: &str) -> usize {
     let mut garden = Garden::new(input);
     let mut visited = vec![vec![false; garden.width]; garden.height];
 
@@ -203,7 +201,7 @@ pub fn part_one() -> usize {
             if visited[row][col] {
                 continue;
             }
-    
+
             let mut measures = Measures::new();
             garden.mesure_region(row, col, &mut measures, &mut visited);
             result += measures.area * measures.perimeter;
@@ -214,13 +212,11 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day12.txt");
-
+pub fn part2(input: &str) -> usize {
     let mut garden = Garden::new(input);
     let mut visited = vec![vec![false; garden.width]; garden.height];
     let mut fences = HashSet::new();
-    
+
     let mut result = 0;
 
     for row in 0..garden.height {

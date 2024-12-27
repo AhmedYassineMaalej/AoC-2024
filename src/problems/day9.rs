@@ -5,9 +5,7 @@ enum DiskEntry {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day9.txt");
-
+pub fn part1(input: &str) -> usize {
     let mut memory = Vec::new();
 
     for (idx, size) in input.trim().char_indices() {
@@ -68,9 +66,7 @@ fn fill_freespace(
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day9.txt");
-
+pub fn part2(input: &str) -> usize {
     let mut memory = Vec::new();
 
     for (idx, size) in input.trim().char_indices() {
@@ -140,5 +136,3 @@ fn check_sum(memory: &[DiskEntry]) -> usize {
 
     result
 }
-
-

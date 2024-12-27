@@ -44,9 +44,7 @@ fn parse(input: &str) -> (HashSet<[usize; 5]>, HashSet<[usize; 5]>) {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day25.txt");
-
+pub fn part1(input: &str) -> usize {
     let (locks, keys) = parse(input);
 
     let mut count = 0;

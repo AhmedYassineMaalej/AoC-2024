@@ -221,7 +221,6 @@ impl Grid {
         let mut to_visit: BinaryHeap<Reverse<Node>> = BinaryHeap::new();
 
         let mut prev: Vec<Vec<[bool; 4]>> = vec![vec![[false; 4]; self.width]; self.height];
-        // let mut prev: HashMap<(usize, usize), Vec<(usize, usize)>> = HashMap::new();
 
         to_visit.push(Reverse(Node {
             position: self.start,
@@ -335,20 +334,15 @@ impl Grid {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day16.txt");
-
+pub fn part1(input: &str) -> usize {
     let grid = Grid::parse(input);
 
     grid.min_path_cost().unwrap()
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day16.txt");
-
+pub fn part2(input: &str) -> usize {
     let grid = Grid::parse(input);
 
     grid.get_min_path_tiles().unwrap()
 }
-

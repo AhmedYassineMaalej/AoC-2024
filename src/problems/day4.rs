@@ -1,7 +1,5 @@
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day4.txt");
-
+pub fn part1(input: &str) -> usize {
     let lines: Vec<&str> = input.lines().collect();
     let height = lines.len();
     let width = lines.first().unwrap().len();
@@ -71,9 +69,7 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day4.txt");
-
+pub fn part2(input: &str) -> usize {
     let lines: Vec<&str> = input.lines().collect();
     let height = lines.len();
     let width = lines.first().unwrap().len();

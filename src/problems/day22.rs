@@ -15,9 +15,7 @@ fn mix(value: i64, secret: i64) -> i64 {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> i64 {
-    let input: &str = include_str!("../../input/day22.txt");
-
+pub fn part1(input: &str) -> i64 {
     let mut sum = 0;
     for line in input.lines() {
         let mut secret: i64 = line.parse().unwrap();
@@ -33,9 +31,7 @@ pub fn part_one() -> i64 {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> i64 {
-    let input: &str = include_str!("../../input/day22.txt");
-
+pub fn part2(input: &str) -> i64 {
     let mut changes_map: HashMap<Vec<i64>, i64> = HashMap::new();
 
     for line in input.lines() {

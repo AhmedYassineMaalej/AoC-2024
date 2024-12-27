@@ -120,9 +120,7 @@ impl Grid {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day18.txt");
-
+pub fn part1(input: &str) -> usize {
     let mut grid = Grid::new(71, 71);
 
     for byte in input.lines().take(1024) {
@@ -138,13 +136,14 @@ pub fn part_one() -> usize {
 }
 
 #[allow(clippy::similar_names, dead_code)]
-pub fn part_two() -> String {
-    let input: &str = include_str!("../../input/day18.txt");
-
-    let bytes: Vec<(usize, usize)> = input.lines().map(|line| {
-        let (row, col) = line.split_once(',').unwrap();
-        (row.parse::<usize>().unwrap(), col.parse::<usize>().unwrap())
-    }).collect();
+pub fn part2(input: &str) -> String {
+    let bytes: Vec<(usize, usize)> = input
+        .lines()
+        .map(|line| {
+            let (row, col) = line.split_once(',').unwrap();
+            (row.parse::<usize>().unwrap(), col.parse::<usize>().unwrap())
+        })
+        .collect();
 
     let mut grid = Grid::new(71, 71);
 
@@ -153,9 +152,9 @@ pub fn part_two() -> String {
 
     while min < max {
         let mid = (min + max) / 2;
-        
+
         grid.corrupt_spaces(&bytes[..=mid]);
-        
+
         if grid.path_exists() {
             min = mid + 1;
         } else {

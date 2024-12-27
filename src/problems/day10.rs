@@ -1,7 +1,5 @@
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day10.txt");
-
+pub fn part1(input: &str) -> usize {
     let map: Vec<Vec<u8>> = input
         .lines()
         .map(|line| line.chars().map(|char| char as u8 - b'0').collect())
@@ -56,9 +54,7 @@ fn get_trailheads(
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day10.txt");
-
+pub fn part2(input: &str) -> usize {
     let map: Vec<Vec<u8>> = input
         .lines()
         .map(|line| line.chars().map(|char| char as u8 - b'0').collect())

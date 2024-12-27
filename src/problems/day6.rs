@@ -73,9 +73,7 @@ impl Direction {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day6.txt");
-
+pub fn part1(input: &str) -> usize {
     let grid = Grid::new(input);
     let (mut guard_row, mut guard_col) = grid.get_guard_position();
     let mut direction = Direction::Up; // UP
@@ -95,9 +93,7 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day6.txt");
-
+pub fn part2(input: &str) -> usize {
     let mut grid = Grid::new(input);
     let (mut guard_row, mut guard_col) = grid.get_guard_position();
     let mut direction = Direction::Up;

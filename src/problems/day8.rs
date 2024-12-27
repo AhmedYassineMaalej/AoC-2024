@@ -45,9 +45,7 @@ impl Position {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> usize {
-    let input: &str = include_str!("../../input/day8.txt");
-
+pub fn part1(input: &str) -> usize {
     let height = input.lines().count().try_into().unwrap();
     let width = input.lines().next().unwrap().len().try_into().unwrap();
 
@@ -91,9 +89,7 @@ pub fn part_one() -> usize {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> usize {
-    let input: &str = include_str!("../../input/day8.txt");
-
+pub fn part2(input: &str) -> usize {
     let height = input.lines().count().try_into().unwrap();
     let width = input.lines().next().unwrap().len().try_into().unwrap();
 

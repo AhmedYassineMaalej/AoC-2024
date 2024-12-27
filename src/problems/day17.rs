@@ -41,9 +41,7 @@ fn compute_output(a: u64) -> Vec<u8> {
 }
 
 #[allow(dead_code)]
-pub fn part_one() -> String {
-    let input: &str = include_str!("../../input/day17.txt");
-
+pub fn part1(input: &str) -> String {
     let a = input.lines().next().unwrap()[12..].parse().unwrap();
 
     let output = compute_output(a);
@@ -53,7 +51,8 @@ pub fn part_one() -> String {
 }
 
 #[allow(dead_code)]
-pub fn part_two() -> u64 {
+#[allow(unused)]
+pub fn part2(input: &str) -> u64 {
     let mut candidates: BinaryHeap<Reverse<u64>> = BinaryHeap::new();
 
     let target = [2, 4, 1, 5, 7, 5, 1, 6, 0, 3, 4, 1, 5, 5, 3, 0];

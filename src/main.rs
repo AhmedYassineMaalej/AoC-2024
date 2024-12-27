@@ -34,12 +34,14 @@ const PROBLEM_NAMES: [&str; 25] = [
 
 macro_rules! run_day {
     ($x: ident) => {
+        let input = include_str!("../input/day24.txt");
+
         let start1 = Instant::now();
-        let result1 = problems::$x::part_one();
+        let result1 = problems::$x::part1(input);
         let duration1 = start1.elapsed();
 
         let start2 = Instant::now();
-        let result2 = problems::$x::part_two();
+        let result2 = problems::$x::part2(input);
         let duration2 = start2.elapsed();
 
         println!("Part 1: solution: {} || time: {:?}", result1, duration1);
@@ -54,12 +56,14 @@ macro_rules! table_row {
         let problem_number: usize = day[3..].parse().unwrap();
         let problem_name = PROBLEM_NAMES[problem_number - 1];
 
+        let input = include_str!("../input/day24.txt");
+
         let start1 = Instant::now();
-        let result1 = problems::$x::part_one();
+        let result1 = problems::$x::part1();
         let duration1 = start1.elapsed();
 
         let start2 = Instant::now();
-        let result2 = problems::$x::part_two();
+        let result2 = problems::$x::part2();
         let duration2 = start2.elapsed();
 
         // println!("solutions: {result1} || {result2}");

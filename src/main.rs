@@ -1,6 +1,5 @@
 #![warn(clippy::pedantic)]
 
-use std::time::Instant;
 mod problems;
 
 #[allow(unused)]
@@ -32,6 +31,7 @@ const PROBLEM_NAMES: [&str; 25] = [
     "Code Chronicle",
 ];
 
+#[allow(unused_macros)]
 macro_rules! run_day {
     ($x: ident) => {
         let input = include_str!("../input/day24.txt");
@@ -71,6 +71,4 @@ macro_rules! table_row {
     };
 }
 
-fn main() {
-    run_day!(day24);
-}
+fn main() {}
